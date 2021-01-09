@@ -94,9 +94,88 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // print(solutionSortedDates(dates: ["15 May 1994","5 Apr 1990","12 Dec 2001"]))
         //print(solutionArrayDuplicate(array: [1,2,3,6,5,8,2,4,5,6]))
         // print(solutionDuplicate2(X: 8, Y: 3))
-        print(longBackSlice(a: [2,5,3,4,5,12]))
+        
+        //  print(solutionCod(["codility1", "codility3", "codility2", "codility4b", "codility4a"], ["Wrong answer", "OK", "OK", "Time limit exceeded", "OK"]))
+        // print(longBackSlice(a: [2,5,3,4,5,12]))
+        // print(TripCal([7, 3, 7, 3, 1, 3, 4, 1]))
+        print(ARtch([2,1,3], 2))
         return true
     }
+    
+    
+    public func ARtch(_ A : [Int], _ S : Int) -> Int {
+        let array = A
+        var maxTrip = array.count
+        
+        for i in 0 ..< (A.count) {
+            var tempsNumberOfTrips = array
+            for i in 0 ..< (array.count) {
+                let maxChunks = tempsNumberOfTrips.chunked(into: maxTrip)
+                for maxchunk in maxChunks {
+                    let values = maxchunk.reduce(0, +)
+                    if (values / maxchunk.count) == S {
+                        return maxchunk.count
+                    }
+                }
+                tempsNumberOfTrips.remove(at: 0)
+                
+            }
+            maxTrip = maxTrip - 1
+
+        }
+        
+        return 0
+    }
+    
+    
+    public func TripCal(_ A :[Int]) -> Int {
+        let numberOfTrips = A
+        let totalTrips = Array(Set(numberOfTrips)).sorted()
+        
+        
+        for i in 0 ..< (A.count) {
+            let maxTrip = totalTrips.count + (i)
+            var tempsNumberOfTrips = numberOfTrips
+            for i in 0 ..< (numberOfTrips.count) {
+                let maxChunks = tempsNumberOfTrips.chunked(into: maxTrip)
+                for maxchunk in maxChunks {
+                    if Array(Set(maxchunk)).sorted() == totalTrips {
+                        return maxTrip
+                    }
+                }
+                tempsNumberOfTrips.remove(at: 0)
+            }
+        }
+        
+        return  0
+    }
+    
+    func solutionCod(_ T : [String], _ R :[String]) -> Int {
+        
+        let testCases  = T
+        let results = R
+        var testCaseresults: [Int : String] = [:]
+        
+        for (index, testcase) in testCases.enumerated() {
+            let testCaseNo =  Int(testcase.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()) ?? 0
+            if testCaseresults[testCaseNo] != "Wrong answer" &&   testCaseresults[testCaseNo] != "Runtime error" &&  testCaseresults[testCaseNo] !=  "Time limit exceeded" {
+                testCaseresults[testCaseNo] =  results[index]
+            }
+        }
+        
+        var totalResult = 0
+        
+        for value in Array(testCaseresults.values) {
+            if value == "OK" {
+                totalResult = totalResult + 1
+            }
+        }
+        
+        let finalResult = (100 * totalResult ) / Array(testCaseresults.values).count
+        
+        return finalResult
+    }
+    
     
     func longBackSlice(a:[Int]) -> Int {
         
@@ -121,14 +200,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //startIndex = startIndex + 1
             if biValuedFAlse == false && ifAlreadyUpdated == false {
                 totalCount = totalCount + 1
-
+                
             }
         }
         if totalCount > a.count {
             return a.count
         }
         
-       return totalCount
+        return totalCount
     }
     
     func solution123(a: [Int]) -> Int {
